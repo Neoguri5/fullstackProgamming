@@ -1,0 +1,7 @@
+name: movie_app_backend
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+dependencies:
+  alfred: ^1.1.1
+  mongo_dart: ^0.10.3
+  decimal: ^2.3.3  # 호환되는 버전으로 설정
