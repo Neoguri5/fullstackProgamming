@@ -1,21 +1,36 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-final String apiKey = 'd7e2c0c5a903a93afcfd18bd4e520a9a';
-final String baseUrl = 'https://api.themoviedb.org/3';
+class TMDBApi {
+  final String apiKey = 'd7e2c0c5a903a93afcfd18bd4e520a9a';
 
-Future<String> fetchPosterPath(String movieName) async {
-  final url = '$baseUrl/search/movie?api_key=$apiKey&query=$movieName';
-  final response = await http.get(Uri.parse(url));
+  Future<List<dynamic>> fetchUpcomingExpensiveMovies() async {
+    final response = await http.get(Uri.parse(
+        'https://api.themoviedb.org/3/movie/upcoming?api_key=$apiKey&language=en-US'));
 
-  if (response.statusCode == 200) {
-    final data = json.decode(response.body);
-    if (data['results'] != null && data['results'].isNotEmpty) {
-      final posterPath = data['results'][0]['poster_path'];
-      if (posterPath != null) {
-        return 'https://image.tmdb.org/t/p/w500$posterPath';
+    if (response.statusCode == 200) {
+      final List<dynamic> movies = json.decode(response.body)['results'];
+      List<dynamic> filteredMovies = [];
+      for (var movie in movies) {
+        final movieDetails = await fetchMovieDetails(movie['id']);
+        if (movieDetails['budget'] > 50000000) {
+          filteredMovies.add(movieDetails);
+        }
       }
+      return filteredMovies;
+    } else {
+      throw Exception('Failed to load upcoming movies');
     }
   }
-  return 'https://via.placeholder.com/150'; // 포스터를 찾지 못한 경우의 기본 이미지
+
+  Future<Map<String, dynamic>> fetchMovieDetails(int movieId) async {
+    final response = await http.get(Uri.parse(
+        'https://api.themoviedb.org/3/movie/$movieId?api_key=$apiKey&language=en-US'));
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load movie details');
+    }
+  }
 }
