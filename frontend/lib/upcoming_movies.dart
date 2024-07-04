@@ -16,7 +16,7 @@ class HollywoodSection extends StatelessWidget {
           return Center(child: Text('No data found'));
         } else {
           final movies = snapshot.data!;
-          return SizedBox(
+          return Container(
             height: 250,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -24,7 +24,7 @@ class HollywoodSection extends StatelessWidget {
               itemBuilder: (context, index) {
                 final movie = movies[index];
                 return Container(
-                  width: 150,
+                  width: 160,
                   margin: EdgeInsets.all(8.0),
                   child: Column(
                     children: [

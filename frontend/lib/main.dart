@@ -29,15 +29,29 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('예매율 TOP3 및 할리우드 기대작'),
+        title: Text('무비 Scope'),
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 예매율 TOP3 섹션
-            MovieList(),
-            // 새로운 할리우드 기대작 섹션
-            HollywoodSection(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                '오늘의 예매율 TOP3',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ),
+            MovieList(), // 예매율 TOP3 섹션
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+              child: Text(
+                '할리우드 기대작',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ),
+            HollywoodSection(), // 새로 추가한 섹션
           ],
         ),
       ),
