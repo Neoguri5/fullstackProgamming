@@ -38,7 +38,7 @@ class HollywoodSection extends StatelessWidget {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        movie['title'],
+                        movie['title'], // 한국어 제목 사용
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                         overflow: TextOverflow.ellipsis,
