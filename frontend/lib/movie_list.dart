@@ -15,56 +15,51 @@ Future<List<dynamic>> fetchMovies() async {
 class MovieList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('오늘의 예매율 TOP3'),
-      ),
-      body: FutureBuilder<List<dynamic>>(
-        future: fetchMovies(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            print('Error: ${snapshot.error}'); // 디버깅을 위한 로그 출력
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No data found'));
-          } else {
-            final movies = snapshot.data!;
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: movies.map((movie) {
-                  return Card(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            '${movie['rank']}위: ${movie['percentage']}',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
+    return FutureBuilder<List<dynamic>>(
+      future: fetchMovies(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          print('Error: ${snapshot.error}');
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('No data found'));
+        } else {
+          final movies = snapshot.data!;
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: movies.map((movie) {
+                return Card(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          '${movie['rank']}위: ${movie['percentage']}',
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Image.network(
-                          movie['image'] != 'N/A'
-                              ? movie['image']
-                              : 'https://via.placeholder.com/150',
-                          height: 150,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(movie['status']),
-                        ),
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
-            );
-          }
-        },
-      ),
+                      ),
+                      Image.network(
+                        movie['image'] != 'N/A'
+                            ? movie['image']
+                            : 'https://via.placeholder.com/150',
+                        height: 150,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(movie['status']),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          );
+        }
+      },
     );
   }
 }
