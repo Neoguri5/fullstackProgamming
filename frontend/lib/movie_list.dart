@@ -50,6 +50,10 @@ class MovieList extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
+                        child: Text(movie['title']), // 한국어 제목 표시
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Text(movie['status']),
                       ),
                     ],
