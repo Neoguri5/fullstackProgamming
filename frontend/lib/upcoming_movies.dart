@@ -13,18 +13,21 @@ class HollywoodSection extends StatelessWidget {
           print('Error: ${snapshot.error}'); // 디버깅을 위한 로그 출력
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          print('No data found'); // 디버깅을 위한 로그 출력
           return Center(child: Text('No data found'));
         } else {
           final movies = snapshot.data!;
+          print('Movies found: ${movies.length}'); // 디버깅을 위한 로그 출력
           return Container(
-            height: 250,
+            margin: EdgeInsets.symmetric(vertical: 20.0),
+            height: 250.0,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: movies.length,
               itemBuilder: (context, index) {
                 final movie = movies[index];
                 return Container(
-                  width: 160,
+                  width: 160.0,
                   margin: EdgeInsets.all(8.0),
                   child: Column(
                     children: [
