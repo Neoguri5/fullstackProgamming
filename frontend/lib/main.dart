@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'movie_list.dart'; // MovieList 클래스를 임포트
 import 'upcoming_movies.dart'; // HollywoodSection 클래스를 임포트
+import 'upcoming_kr_mv.dart'; // KoreanSection 클래스를 임포트
 
 void main() {
   runApp(MyApp());
@@ -29,7 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('무비 Scope'),
+        title: Text('예매율 TOP3 및 기대작'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -51,7 +52,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
-            HollywoodSection(), // 새로 추가한 섹션
+            HollywoodSection(), // 할리우드 기대작 섹션
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+              child: Text(
+                '한국영화 기대작',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ),
+            KoreanSection(), // 한국영화 기대작 섹션
           ],
         ),
       ),
