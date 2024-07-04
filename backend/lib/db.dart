@@ -2,6 +2,23 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'tmdb_api.dart';
 
+// 포스터 URL을 가져오는 함수 정의
+Future<String> fetchPosterPath(String title) async {
+  final apiKey = 'd7e2c0c5a903a93afcfd18bd4e520a9a'; // TMDB API 키
+  final url =
+      'https://api.themoviedb.org/3/search/movie?api_key=$apiKey&query=${Uri.encodeComponent(title)}';
+  final response = await http.get(Uri.parse(url));
+
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body);
+    if (data['results'].isNotEmpty) {
+      return 'https://image.tmdb.org/t/p/w500${data['results'][0]['poster_path']}';
+    }
+  }
+  return 'https://via.placeholder.com/150'; // 포스터를 찾을 수 없는 경우 기본 이미지 URL
+}
+
+// API에서 영화 데이터를 가져오는 함수
 Future<List<dynamic>> fetchMoviesFromAPI() async {
   final apiKey = '8f500ab7f8f2bb1226ebce46532423f3';
 
@@ -39,6 +56,7 @@ Future<List<dynamic>> fetchMoviesFromAPI() async {
   return movieList;
 }
 
+// 영화 데이터를 가공하는 함수
 Future<List<Map<String, dynamic>>> getMovies() async {
   final movies = await fetchMoviesFromAPI();
   final List<Map<String, dynamic>> movieDataList = [];
