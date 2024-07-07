@@ -36,12 +36,9 @@ class KOFICApi {
 
         // 추가할 영화 목록
         final List<Map<String, String>> additionalMovies = [
-          {'name': '리볼버', 'openDt': '2024-08-07'},
           {'name': '행복의 나라', 'openDt': '2024-08-14'},
           {'name': '왕을 찾아서', 'openDt': '2024-10-01'},
-          {'name': '보통의 가족', 'openDt': '2024-10-01'},
           {'name': '1승', 'openDt': '2024-10-01'},
-          {'name': '부활남', 'openDt': '2024-12-01'},
           {'name': '하얼빈', 'openDt': '2024-12-18'}
         ];
 
@@ -54,12 +51,14 @@ class KOFICApi {
         }
 
         // 개봉일 기준으로 정렬 (이른 순으로 정렬)
-        filteredMovies.sort((a, b) => a['openDt'].compareTo(b['openDt']));
+        filteredMovies.sort((a, b) => compareDates(a['openDt'], b['openDt']));
 
         // TMDB API를 사용하여 포스터 이미지 가져오기
         for (var movie in filteredMovies) {
           final posterPath = await fetchMoviePoster(movie['movieNm']);
           movie['poster_path'] = posterPath;
+          // 날짜 형식을 yyyy-mm-dd로 변환
+          movie['openDt'] = formatDate(movie['openDt']);
         }
 
         return filteredMovies;
@@ -90,7 +89,7 @@ class KOFICApi {
   Future<Map<String, dynamic>?> fetchAdditionalMovie(
       String movieName, String openDt) async {
     final url =
-        'https://api.themoviedb.org/3/search/movie?api_key=$tmdbApiKey&query=${Uri.encodeComponent(movieName)}&language=ko-KR';
+        'https://api.themoviedb.org/3/search/movie?api_key=$tmdbApiKey&query=${Uri.encodeComponent(movieName)}&language=ko-KR&region=KR';
 
     final response = await http.get(Uri.parse(url));
 
@@ -117,21 +116,59 @@ class KOFICApi {
   }
 
   Future<String> fetchMoviePoster(String movieName) async {
+    final specificPosters = {
+      '리볼버':
+          'https://i.namu.wiki/i/GW5VxeMNEhkFYbsZIgizTaPIODhdF8sShr7miSnHIYipdTye9Xq874jDTu4fqiKdgKQb3uUcGvvWs6U9HJUszV3leUWAjoDGk3FZ50h_8mfeSTJ2Tqnv_T7h9dG5fnS2GFQKB5wYIhAWTidzv46dnw.webp',
+      '베테랑2': 'https://example.com/path/to/veteran2_poster.jpg',
+      '보통의 가족': 'https://example.com/path/to/ordinary_family_poster.jpg',
+      '부활': 'https://example.com/path/to/revival_poster.jpg',
+    };
+
+    if (specificPosters.containsKey(movieName)) {
+      return specificPosters[movieName]!;
+    }
+
     final url =
-        'https://api.themoviedb.org/3/search/movie?api_key=$tmdbApiKey&query=${Uri.encodeComponent(movieName)}&language=ko-KR';
+        'https://api.themoviedb.org/3/search/movie?api_key=$tmdbApiKey&query=${Uri.encodeComponent(movieName)}&language=ko-KR&region=KR';
 
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       final List<dynamic> results = json.decode(response.body)['results'];
       if (results.isNotEmpty) {
-        return results[0]['poster_path'] ?? '';
+        return results[0]['poster_path'] != null
+            ? 'https://image.tmdb.org/t/p/w500${results[0]['poster_path']}'
+            : 'https://via.placeholder.com/150';
       } else {
         print('No poster found for movie: $movieName'); // 디버깅 로그 추가
-        return '';
+        return 'https://via.placeholder.com/150';
       }
     } else {
       throw Exception('Failed to load movie poster');
     }
+  }
+
+  int compareDates(String date1, String date2) {
+    final parsedDate1 = parseDate(date1);
+    final parsedDate2 = parseDate(date2);
+
+    return parsedDate1.compareTo(parsedDate2);
+  }
+
+  DateTime parseDate(String date) {
+    if (date.contains('-')) {
+      return DateTime.parse(date); // yyyy-mm-dd 형식
+    } else {
+      // yyyymmdd 형식
+      final year = int.parse(date.substring(0, 4));
+      final month = int.parse(date.substring(4, 6));
+      final day = int.parse(date.substring(6, 8));
+      return DateTime(year, month, day);
+    }
+  }
+
+  String formatDate(String date) {
+    final parsedDate = parseDate(date);
+    return '${parsedDate.year.toString().padLeft(4, '0')}-${parsedDate.month.toString().padLeft(2, '0')}-${parsedDate.day.toString().padLeft(2, '0')}';
   }
 }
