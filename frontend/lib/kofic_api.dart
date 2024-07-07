@@ -116,18 +116,6 @@ class KOFICApi {
   }
 
   Future<String> fetchMoviePoster(String movieName) async {
-    final specificPosters = {
-      '리볼버':
-          'https://i.namu.wiki/i/GW5VxeMNEhkFYbsZIgizTaPIODhdF8sShr7miSnHIYipdTye9Xq874jDTu4fqiKdgKQb3uUcGvvWs6U9HJUszV3leUWAjoDGk3FZ50h_8mfeSTJ2Tqnv_T7h9dG5fnS2GFQKB5wYIhAWTidzv46dnw.webp',
-      '베테랑2': 'https://example.com/path/to/veteran2_poster.jpg',
-      '보통의 가족': 'https://example.com/path/to/ordinary_family_poster.jpg',
-      '부활': 'https://example.com/path/to/revival_poster.jpg',
-    };
-
-    if (specificPosters.containsKey(movieName)) {
-      return specificPosters[movieName]!;
-    }
-
     final url =
         'https://api.themoviedb.org/3/search/movie?api_key=$tmdbApiKey&query=${Uri.encodeComponent(movieName)}&language=ko-KR&region=KR';
 
@@ -136,9 +124,14 @@ class KOFICApi {
     if (response.statusCode == 200) {
       final List<dynamic> results = json.decode(response.body)['results'];
       if (results.isNotEmpty) {
-        return results[0]['poster_path'] != null
-            ? 'https://image.tmdb.org/t/p/w500${results[0]['poster_path']}'
-            : 'https://via.placeholder.com/150';
+        for (var result in results) {
+          final posterPath = result['poster_path'];
+          if (posterPath != null) {
+            return 'https://image.tmdb.org/t/p/w500$posterPath';
+          }
+        }
+        print('No valid poster path available for movie: $movieName');
+        return 'https://via.placeholder.com/150';
       } else {
         print('No poster found for movie: $movieName'); // 디버깅 로그 추가
         return 'https://via.placeholder.com/150';
