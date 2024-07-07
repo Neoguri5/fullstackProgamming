@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'tmdb_api.dart'; // TMDB API 클래스 임포트
+import 'kofic_api.dart'; // 영화진흥원 API 클래스 임포트
 
 class KoreanSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<dynamic>>(
-      future: TMDBApi().fetchUpcomingKoreanMovies(),
+      future: KOFICApi().fetchUpcomingKoreanMovies(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -26,25 +26,29 @@ class KoreanSection extends StatelessWidget {
               itemCount: movies.length,
               itemBuilder: (context, index) {
                 final movie = movies[index];
+                final posterPath = movie['poster_path'] != ''
+                    ? 'https://image.tmdb.org/t/p/w500${movie['poster_path']}'
+                    : 'https://via.placeholder.com/150';
+
                 return Container(
                   width: 160.0,
                   margin: EdgeInsets.all(8.0),
                   child: Column(
                     children: [
                       Image.network(
-                        'https://image.tmdb.org/t/p/w500${movie['poster_path']}',
+                        posterPath, // 포스터 URL
                         height: 180,
                         fit: BoxFit.cover,
                       ),
                       SizedBox(height: 8),
                       Text(
-                        movie['title'], // 한국어 제목 사용
+                        movie['movieNm'], // 한국어 제목 사용
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        '개봉일: ${movie['release_date']}',
+                        '개봉일: ${movie['openDt']}',
                         style: TextStyle(fontSize: 14),
                       ),
                     ],
