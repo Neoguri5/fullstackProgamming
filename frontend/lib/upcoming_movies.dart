@@ -26,28 +26,28 @@ class HollywoodSection extends StatelessWidget {
               itemCount: movies.length,
               itemBuilder: (context, index) {
                 final movie = movies[index];
-                return Container(
-                  width: 160.0,
+                final posterPath = movie['poster_path'] != null
+                    ? 'https://image.tmdb.org/t/p/w500${movie['poster_path']}'
+                    : 'https://via.placeholder.com/150';
+
+                return Card(
                   margin: EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Image.network(
-                        'https://image.tmdb.org/t/p/w500${movie['poster_path']}',
-                        height: 180,
-                        fit: BoxFit.cover,
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        movie['title'], // 한국어 제목 사용
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        '개봉일: ${movie['release_date']}',
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    ],
+                  child: Container(
+                    width: 160.0,
+                    child: Column(
+                      children: [
+                        Image.network(posterPath, height: 150),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            movie['title'],
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Text('개봉일: ${movie['release_date']}'),
+                      ],
+                    ),
                   ),
                 );
               },

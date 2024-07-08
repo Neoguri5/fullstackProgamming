@@ -30,15 +30,27 @@ class RecommendedMovies extends StatelessWidget {
                     ? 'https://image.tmdb.org/t/p/w500${movie['poster_path']}'
                     : 'https://via.placeholder.com/150';
 
-                return Container(
-                  width: 160.0,
+                // 평점 반올림하여 소수점 첫째 자리까지 표시 (셋째 자리에서 반올림)
+                final rating = (movie['vote_average'] * 100).round() / 100;
+
+                return Card(
                   margin: EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Image.network(posterPath, height: 200),
-                      Text(movie['title']),
-                      Text('평점: ${movie['vote_average']}'),
-                    ],
+                  child: Container(
+                    width: 160.0,
+                    child: Column(
+                      children: [
+                        Image.network(posterPath, height: 150),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            movie['title'],
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Text('평점: $rating'),
+                      ],
+                    ),
                   ),
                 );
               },
