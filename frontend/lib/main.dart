@@ -3,6 +3,7 @@ import 'movie_list.dart';
 import 'upcoming_movies.dart';
 import 'upcoming_kr_mv.dart';
 import 'recommended_movies.dart'; // 새로운 섹터 임포트
+import 're_release_movies.dart'; // 재개봉 섹터 임포트
 
 void main() => runApp(MyApp());
 
@@ -27,9 +28,12 @@ class MyApp extends StatelessWidget {
               Text('한국영화 기대작',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
               KoreanSection(),
-              Text('추천 작품',
+              Text('추천 영화',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
               RecommendedMovies(), // 새로운 섹터 추가
+              Text('재개봉 영화',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+              ReReleaseMovies(), // 재개봉 섹터 추가
             ],
           ),
         ),
