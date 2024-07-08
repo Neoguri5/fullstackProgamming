@@ -25,11 +25,13 @@ class KOFICApi {
         final List<dynamic> movies =
             responseData['movieListResult']['movieList'];
 
-        // "장편" 영화만 필터링하고 성인 영화와 개봉 예정이 아닌 영화 제외
+        // "장편" 영화만 필터링하고 성인 영화, 개봉 예정이 아닌 영화 및 한국 영화가 아닌 영화 제외
         final filteredMovies = movies
             .where((movie) =>
                 movie['typeNm'] == '장편' &&
                 movie['prdtStatNm'] == '개봉예정' &&
+                movie['repNationNm'] == '한국' &&
+                movie['repGenreNm'] != '공연' &&
                 !isAdultGenre(movie['repGenreNm']) &&
                 isWithinDateRange(movie['openDt'], startDate, endDate))
             .toList();
@@ -73,7 +75,7 @@ class KOFICApi {
 
   bool isAdultGenre(String genre) {
     // 성인 영화로 간주되는 장르 목록
-    final adultGenres = ['멜로/로맨스', '드라마'];
+    final adultGenres = ['멜로/로맨스', '드라마', '성인물(에로)'];
     return adultGenres.contains(genre);
   }
 
