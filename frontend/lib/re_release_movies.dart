@@ -10,8 +10,8 @@ class ReReleaseMovies extends StatefulWidget {
 class _ReReleaseMoviesState extends State<ReReleaseMovies> {
   final String tmdbApiKey = 'd7e2c0c5a903a93afcfd18bd4e520a9a';
   final List<Map<String, String>> reReleaseMovies = [
-    {'title': '듄 1', 'releaseDate': '2024-07-03 ~ 2024-07-14', 'cinema': 'CGV'},
-    {'title': '듄 2', 'releaseDate': '2024-07-03 ~ 2024-07-14', 'cinema': 'CGV'},
+    {'title': '듄 1', 'releaseDate': '2024-07-03', 'cinema': 'CGV'},
+    {'title': '듄 2', 'releaseDate': '2024-07-03', 'cinema': 'CGV'},
     {'title': '가장 따뜻한 색, 블루', 'releaseDate': '2024-07-10', 'cinema': 'CGV'},
     {'title': '비포 선라이즈', 'releaseDate': '2024-07-17', 'cinema': '롯데시네마'},
     {'title': '포드 v 페라리', 'releaseDate': '2024-07-17', 'cinema': '메가박스'},
@@ -81,7 +81,7 @@ class _ReReleaseMoviesState extends State<ReReleaseMovies> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Text('상영일: ${movie['releaseDate']}'),
+                        Text('(재)개봉일: ${movie['releaseDate']}'),
                         Text('극장: ${movie['cinema']}'),
                       ],
                     ),
