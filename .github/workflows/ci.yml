@@ -13,7 +13,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16'  # or '20'
+        node-version: '20'  # 업데이트된 Node.js 버전
 
     - name: Install Flutter
       uses: subosito/flutter-action@v2
