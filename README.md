@@ -15,9 +15,14 @@
  4. Client Structure
 
  4.1. Directory Structure
-frontend/
-   
-
+ main.dart
+ ├── movie_list.dart
+ ├── upcoming_movies.dart
+ ├── upcoming_kr_mv.dart
+ ├── recommended_movies.dart
+ ├── re_release_movies.dart
+ └── critic_recommendations.dart
+ 
  4.2. Code Locations and Roles
 - movie_list.dart: Manages the data for the top 3 ticket sales
 - upcoming_movies.dart: Manages the data for anticipated Hollywood releases
@@ -64,6 +69,12 @@ recommended_movies.dart
  5. Server Structure
 
  5.1. Diagram
+ backend/
+ ├── api_server/
+ │   └── api_server.dart
+ └── data_server/
+     └── data_server.dart
+
  
  5.2. Code Locations and Roles
 - api_server.dart: Receives requests from the client, collects data from the data server, and responds.
